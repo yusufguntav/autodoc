@@ -6,9 +6,19 @@ import (
 	"strings"
 )
 
-// getCommits fetches unpushed commit hashes and messages
-func getCommits() ([]string, error) {
-	cmd := exec.Command("git", "log", "origin/master..HEAD", "--pretty=format:%H %s") // Sadece pushlanmamış commitleri al
+// getCurrentBranch fetches the active branch name
+func getCurrentBranch() (string, error) {
+	cmd := exec.Command("git", "rev-parse", "--abbrev-ref", "HEAD")
+	output, err := cmd.Output()
+	if err != nil {
+		return "", err
+	}
+	return strings.TrimSpace(string(output)), nil
+}
+
+// getCommits fetches unpushed commit hashes and messages for the active branch
+func getCommits(branch string) ([]string, error) {
+	cmd := exec.Command("git", "log", fmt.Sprintf("origin/%s..HEAD", branch), "--pretty=format:%H %s") // Sadece pushlanmamış commitleri al
 	output, err := cmd.Output()
 	if err != nil {
 		return nil, err
@@ -50,7 +60,13 @@ func classifyFiles(files []string) (frontend []string, general []string) {
 }
 
 func main() {
-	commits, err := getCommits()
+	branch, err := getCurrentBranch()
+	if err != nil {
+		fmt.Println("Error fetching current branch:", err)
+		return
+	}
+
+	commits, err := getCommits(branch)
 	if err != nil {
 		fmt.Println("Error fetching commits:", err)
 		return
