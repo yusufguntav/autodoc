@@ -2,40 +2,57 @@ package autodocument
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/joho/godotenv"
 	"github.com/spf13/cobra"
 )
 
-// GenerateDocumentation is the main entry point for generating documentation
-func GenerateDocumentation() (string, error) {
+func GenerateDocumentation() {
+
+	var output string
 
 	var rootCmd = &cobra.Command{Use: "autodoc"}
 
 	var autodocCmd = &cobra.Command{
 		Use:   "autodoc",
-		Short: "Otomatik dokümantasyon üret",
+		Short: "Create documentation for your project",
 		Run: func(cmd *cobra.Command, args []string) {
 			err := godotenv.Load()
 			if err != nil {
 				fmt.Printf("error loading .env file: %v\n", err)
+				return
 			}
 
 			branch, err := GetCurrentBranch()
 			if err != nil {
 				fmt.Println(err)
+				return
 			}
 
-			commits, err := GetCommits(branch)
+			commits, err := GetUnpushedCommits(branch)
 			if err != nil {
 				fmt.Println(err)
+				return
 			}
 
-			fmt.Println(SendMessageAI(commits))
+			result := SendMessageAI(commits)
+
+			if output != "" {
+				err := os.WriteFile(output, []byte(result), 0644)
+				if err != nil {
+					fmt.Printf("error writing to file: %v\n", err)
+					return
+				}
+				fmt.Printf("Documentation written to %s\n", output)
+			} else {
+				fmt.Println(result)
+			}
+
 		},
 	}
 
+	autodocCmd.Flags().StringVarP(&output, "output", "o", "", "File path to write the documentation output")
 	rootCmd.AddCommand(autodocCmd)
 	rootCmd.Execute()
-	return "", nil
 }

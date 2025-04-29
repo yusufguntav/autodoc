@@ -17,8 +17,8 @@ func GetCurrentBranch() (string, error) {
 	return strings.TrimSpace(string(output)), nil
 }
 
-// GetCommits fetches unpushed commit hashes and messages for the active branch
-func GetCommits(branch string) (string, error) {
+// GetUnpushedCommits fetches unpushed commit hashes and messages for the active branch
+func GetUnpushedCommits(branch string) (string, error) {
 	cmd := exec.Command("git", "log", fmt.Sprintf("origin/%s..HEAD", branch), "--pretty=format:%H")
 	output, err := cmd.Output()
 	if err != nil {
