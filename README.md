@@ -1,108 +1,65 @@
 # Auto-Document
 
-Auto-Document is a Go package that automatically generates documentation for your project based on git commits using AI. It analyzes your unpushed Git commits and generates comprehensive documentation automatically.
+**Auto-Document** is a Go package that automatically generates documentation for your project by analyzing your unpushed Git commits using AI (Gemini). This helps keep your documentation up-to-date with minimal effort.
 
-## Features
+---
 
-- Analyzes unpushed Git commits in your current branch
-- Uses Gemini AI to generate human-readable documentation
-- Easy to integrate into your development workflow
+## 🚀 Features
 
-## Installation
+- 🔍 Analyzes **unpushed Git commits** in your current branch  
+- 🤖 Uses **Gemini AI** to generate clear, human-readable documentation  
+- 🔧 Easily integrates into your existing development workflow
 
-### As a CLI tool
+---
 
-```bash
-go install github.com/yusufguntav/Auto-Document/cmd/auto-doc@latest
-```
+## 📦 Installation
 
-### As a library
+Install the package using:
 
 ```bash
-go get github.com/yusufguntav/Auto-Document
+go get github.com/yusufguntav/autodoc
 ```
+✅ Prerequisites
+Before using Auto-Document, ensure the following:
 
-## Prerequisites
+Go 1.18+ installed
 
-- Go 1.18 or later
-- Git installed and accessible in your PATH
-- A Gemini API key
+Git installed and accessible via command line
 
-## Configuration
+A valid Gemini API key
 
-Create a `.env` file in your project root with the following content:
+⚙️ Configuration
+Create a .env file in the root of your project with:
 
-```
 GEMINI_API_KEY=your_gemini_api_key_here
+🧠 Usage
 ```
-
-## Usage
-
-### CLI Usage
-
-After installation, run:
-
-```bash
-auto-doc
-```
-
-This will analyze your unpushed commits and generate documentation.
-
-#### Command Line Parameters
-
-The CLI tool supports the following parameters:
-
-```bash
-# Specify a specific branch to analyze
-auto-doc --branch=main
-
-# Save the generated documentation to a file
-auto-doc --output=docs/commit-history.md
-
-# Combine multiple parameters
-auto-doc --branch=development --output=docs/dev-changes.md
-```
-
-### Library Usage
-
-```go
 package main
 
 import (
-	"fmt"
-	
-	"github.com/joho/godotenv"
-	"github.com/yusufguntav/Auto-Document"
+	"github.com/yusufguntav/autodoc"
 )
 
 func main() {
-	// Load environment variables from .env file
-	godotenv.Load()
-	
-	// Get current branch
-	branch, err := autodocument.GetCurrentBranch()
-	if err != nil {
-		fmt.Println("Error:", err)
-		return
-	}
-	
-	// Get commits from branch
-	commits, err := autodocument.GetCommits(branch)
-	if err != nil {
-		fmt.Println("Error:", err)
-		return
-	}
-	
-	// Generate documentation with AI
-	documentation := autodocument.SendMessageAI(commits)
-	fmt.Println(documentation)
+	// Your application logic
+
+	autodoc.GenerateDocumentation()
+
+	// Your application logic
 }
 ```
+Start your project using the autodoc command to trigger documentation generation.
 
-## License
+```
+// Generate document (print terminal)
+go run . autodoc
 
-MIT
+// Generate document to specific file
+go run . autodoc -o document.txt
+```
 
-## Contributing
+📄 License
+This project is licensed under the MIT License.
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+🤝 Contributing
+Contributions are welcome! Feel free to submit a pull request or open an issue.
