@@ -48,6 +48,21 @@ auto-doc
 
 This will analyze your unpushed commits and generate documentation.
 
+#### Command Line Parameters
+
+The CLI tool supports the following parameters:
+
+```bash
+# Specify a specific branch to analyze
+auto-doc --branch=main
+
+# Save the generated documentation to a file
+auto-doc --output=docs/commit-history.md
+
+# Combine multiple parameters
+auto-doc --branch=development --output=docs/dev-changes.md
+```
+
 ### Library Usage
 
 ```go

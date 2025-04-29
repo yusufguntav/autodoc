@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	autodocument "github.com/yusufguntav/Auto-Document"
+	autodocument "github.com/yusufguntav/autodoc"
 )
 
 func main() {

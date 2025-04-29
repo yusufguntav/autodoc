@@ -1,4 +1,4 @@
-module github.com/yusufguntav/Auto-Document
+module github.com/yusufguntav/autodoc
 
 go 1.24.0
 
