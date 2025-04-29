@@ -4,26 +4,38 @@ import (
 	"fmt"
 
 	"github.com/joho/godotenv"
+	"github.com/spf13/cobra"
 )
-
-const geminiAPIURL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
 
 // GenerateDocumentation is the main entry point for generating documentation
 func GenerateDocumentation() (string, error) {
-	err := godotenv.Load()
-	if err != nil {
-		fmt.Printf("error loading .env file: %v\n", err)
+
+	var rootCmd = &cobra.Command{Use: "autodoc"}
+
+	var autodocCmd = &cobra.Command{
+		Use:   "autodoc",
+		Short: "Otomatik dokümantasyon üret",
+		Run: func(cmd *cobra.Command, args []string) {
+			err := godotenv.Load()
+			if err != nil {
+				fmt.Printf("error loading .env file: %v\n", err)
+			}
+
+			branch, err := GetCurrentBranch()
+			if err != nil {
+				fmt.Println(err)
+			}
+
+			commits, err := GetCommits(branch)
+			if err != nil {
+				fmt.Println(err)
+			}
+
+			fmt.Println(SendMessageAI(commits))
+		},
 	}
 
-	branch, err := GetCurrentBranch()
-	if err != nil {
-		return "", fmt.Errorf("error fetching current branch: %w", err)
-	}
-
-	commits, err := GetCommits(branch)
-	if err != nil {
-		return "", fmt.Errorf("error fetching commits: %w", err)
-	}
-
-	return SendMessageAI(commits), nil
+	rootCmd.AddCommand(autodocCmd)
+	rootCmd.Execute()
+	return "", nil
 }
