@@ -10,7 +10,7 @@ import (
 	"google.golang.org/api/option"
 )
 
-func sendMessageAI(changes string) string {
+func SendMessageAI(changes string) string {
 	ctx := context.Background()
 
 	client, err := genai.NewClient(ctx, option.WithAPIKey(os.Getenv("GEMINI_API_KEY")))

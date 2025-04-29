@@ -7,8 +7,8 @@ import (
 	"strings"
 )
 
-// getCurrentBranch fetches the active branch name
-func getCurrentBranch() (string, error) {
+// GetCurrentBranch fetches the active branch name
+func GetCurrentBranch() (string, error) {
 	cmd := exec.Command("git", "rev-parse", "--abbrev-ref", "HEAD")
 	output, err := cmd.Output()
 	if err != nil {
@@ -17,8 +17,8 @@ func getCurrentBranch() (string, error) {
 	return strings.TrimSpace(string(output)), nil
 }
 
-// getCommits fetches unpushed commit hashes and messages for the active branch
-func getCommits(branch string) (string, error) {
+// GetCommits fetches unpushed commit hashes and messages for the active branch
+func GetCommits(branch string) (string, error) {
 	cmd := exec.Command("git", "log", fmt.Sprintf("origin/%s..HEAD", branch), "--pretty=format:%H")
 	output, err := cmd.Output()
 	if err != nil {
